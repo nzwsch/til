@@ -9,3 +9,4 @@ markdown_extensions:
   - pymdownx.highlight:
       auto_title: true
   - pymdownx.superfences
+  - pymdownx.tilde

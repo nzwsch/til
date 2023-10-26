@@ -68,8 +68,10 @@ item.progress.value
 ```
 
 注意点としては`kredis_integer`の初期値は`nil`である。
-現在GitHubで公開されているmainブランチでは`kredis_integer :progress, default: 0`をサポートしている。
-kredisのリリースが待ち遠しいが、`to_i`でも回避できるのでそこまで致命的なものでもない。
+~~現在GitHubで公開されているmainブランチでは`kredis_integer :progress, default: 0`をサポートしている。~~
+~~kredisのリリースが待ち遠しいが、`to_i`でも回避できるのでそこまで致命的なものでもない。~~
+
+**UPDATE:** 幸いなことに[1.6.0](https://github.com/rails/kredis/commit/2ccc5c6bf59e5d38870de45a03e9491a3dc8c397)が早くもリリースされた。ありがとうDHH。
 
 ```text title="Rails Console"
 item.progress.value = 1
