@@ -4,7 +4,7 @@ Ubuntu全般について
 
 ### ImageMagickを消す
 
-```
+```text title=""
 $ sudo rm /usr/share/applications/display-im6.q16.desktop
 ```
 
@@ -14,7 +14,7 @@ imagemagickをインストールするともれなくついてくるが消して
 
 ### nip2を消す
 
-```
+```text title=""
 $ sudo apt purge nip2
 ```
 
@@ -23,7 +23,7 @@ $ sudo apt purge nip2
 
 ### mpvを消す
 
-```
+```text title=""
 $ sudo apt purge mpv
 ```
 
