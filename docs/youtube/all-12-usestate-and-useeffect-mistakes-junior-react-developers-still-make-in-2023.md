@@ -8,54 +8,54 @@
 ### State updates aren't immediate
 
 ```javascript title="BAD"
-import {useState} from 'react'
+import { useState } from "react";
 
 export default function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   const handleClick = () => {
     setCount(count + 1); // 0 + 1
     setCount(count + 1); // 0 + 1
     setCount(count + 1); // 0 + 1
     setCount(count + 1); // 0 + 1
-  }
+  };
 
   return (
     <>
-      <button onClick={handleClick}>
-        Click me
-      </button>
+      <button onClick={handleClick}>Click me</button>
 
-      <p>Count is: {count} {/* 1 */}</p>
+      <p>
+        Count is: {count} {/* 1 */}
+      </p>
     </>
-  )
+  );
 }
 ```
 
 必ずしも`state`を上書きするのは悪くはないのだけれども、このコードの意図する出力は1回のクリックにつき`1`ではなく`4`を期待するはず。
 
 ```javascript title="GOOD"
-import {useState} from 'react'
+import { useState } from "react";
 
 export default function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   const handleClick = () => {
-    setCount(prev => prev + 1);
-    setCount(prev => prev + 1);
-    setCount(prev => prev + 1);
-    setCount(prev => prev + 1);
-  }
+    setCount((prev) => prev + 1);
+    setCount((prev) => prev + 1);
+    setCount((prev) => prev + 1);
+    setCount((prev) => prev + 1);
+  };
 
   return (
     <>
-      <button onClick={handleClick}>
-        Click me
-      </button>
+      <button onClick={handleClick}>Click me</button>
 
-      <p>Count is: {count} {/* 4 */}</p>
+      <p>
+        Count is: {count} {/* 4 */}
+      </p>
     </>
-  )
+  );
 }
 ```
 
@@ -65,52 +65,44 @@ export default function Counter() {
 ### Primitives vs non-primitives
 
 ```javascript title="primitives"
-import {useState} from 'react'
+import { useState } from "react";
 
 export default function Price() {
-  console.log("Component rendering...")
-  const [price, setPrice] = useState(0)
-  const [price, setPrice] = useState("test")
-  const [price, setPrice] = useState(true)
+  console.log("Component rendering...");
+  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("test");
+  const [price, setPrice] = useState(true);
 
   const handleClick = () => {
     setPrice(0);
     setPrice("test");
     setPrice(true);
-  }
+  };
 
-  return (
-    <button onClick={handleClick}>
-      Click me
-    </button>
-  )
+  return <button onClick={handleClick}>Click me</button>;
 }
 ```
 
 これはあまり意識したことがなかったのだが、JavaScriptにおけるプリミティブな値(数値、文字列、論理値)は常に一定なのでボタンをクリックしてもコンポーネントが再描画されることはない。
 
 ```javascript title="non-primitives"
-import {useState} from 'react'
+import { useState } from "react";
 
 export default function Price() {
-  console.log("Component rendering...")
+  console.log("Component rendering...");
   const [price, setPrice] = useState({
     number: 100,
-    totalPrice: true
-  })
+    totalPrice: true,
+  });
 
   const handleClick = () => {
     setPrice({
       number: 100,
-      totalPrice: true
+      totalPrice: true,
     });
-  }
+  };
 
-  return (
-    <button onClick={handleClick}>
-      Click me
-    </button>
-  )
+  return <button onClick={handleClick}>Click me</button>;
 }
 ```
 
@@ -123,7 +115,7 @@ export default function Price() {
 
 ```javascript title="BAD"
 export default function Post() {
-  const [id, setId] = useState(1)
+  const [id, setId] = useState(1);
 
   return (
     <div>
@@ -133,19 +125,19 @@ export default function Post() {
 
       <PostBody id={id} />
     </div>
-  )
+  );
 }
 
 export function PostBody({ id }) {
-  const [text, setText] = useState("")
+  const [text, setText] = useState("");
 
   useEffect(() => {
     fetch(`https://dummyjson.com/posts/${id}`)
-      .then(res => res.json())
-      .then(data => setText(data.body))
-  }, [id])
+      .then((res) => res.json())
+      .then((data) => setText(data.body));
+  }, [id]);
 
-  return <p>{text}</p>
+  return <p>{text}</p>;
 }
 ```
 
@@ -158,7 +150,7 @@ export function PostBody({ id }) {
 
 ```javascript title="GOOD"
 export default function Post() {
-  const [id, setId] = useState(1)
+  const [id, setId] = useState(1);
 
   return (
     <div>
@@ -168,25 +160,25 @@ export default function Post() {
 
       <PostBody id={id} />
     </div>
-  )
+  );
 }
 
 export function PostBody({ id }) {
-  const [text, setText] = useState("")
+  const [text, setText] = useState("");
 
   useEffect(() => {
-    const controller = new AbortController()
+    const controller = new AbortController();
 
     fetch(`https://dummyjson.com/posts/${id}`, {
-      signal: controller.signal
+      signal: controller.signal,
     })
-      .then(res => res.json())
-      .then(data => setText(data.body))
+      .then((res) => res.json())
+      .then((data) => setText(data.body));
 
-    return () => controller.abort()
-  }, [id])
+    return () => controller.abort();
+  }, [id]);
 
-  return <p>{text}</p>
+  return <p>{text}</p>;
 }
 ```
 
