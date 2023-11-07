@@ -152,3 +152,35 @@ WebSocketというのも敬遠していた理由だけれども、今後Hotwire�
 
 正直試してみたかったのだが、Gemfileはできる限り`bundle add`で悲観的に追加したい。
 そう考えると他にできそうなことは少ないのでスルーした。
+
+### .rubocop.ymlをサーバー経由する
+
+たまたまKredisのRuboCopを見ていたら記述がたったのこれだけであった:
+
+```yaml title=".rubocop.yml"
+inherit_from: https://raw.githubusercontent.com/rails/rails/main/.rubocop.yml
+```
+
+これをやることによって手元の編集をいちいちする必要がないというか、複数のプロジェクト間で毎回似たようなファイルを定義する必要がなくなった。
+
+問題はこれをどこで管理するかなのかだが、GitHubでオープンソース管理しているのであればGitHubに任せるのが理にかなってはいる。
+しかし私の場合は極力GitHubよりもGitLabでリポジトリを管理したいので、GitLabのSnippet機能を使うことにした。
+
+このアプローチで少々厄介なのは`rubocop`コマンドを実行するとローカルに少々長いファイルが生成されてしまうようだ:
+
+```text title=""
+.rubocop-https---raw-githubusercontent-com-rails-rails-main--rubocop-yml
+```
+
+そのためVSCodeで以下のような設定を追加した。
+
+```yaml title="settings.json"
+{
+  "files.exclude": {
+    "**/.rubocop-*": true
+  }
+}
+```
+
+これは結構強力な設定で、Explorerからも除外する設定だ。
+これもしばらく運用してみてローカル管理がしっくりくるのか、いずれ結論を出したいと思う。
