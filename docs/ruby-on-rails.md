@@ -184,3 +184,32 @@ inherit_from: https://raw.githubusercontent.com/rails/rails/main/.rubocop.yml
 
 これは結構強力な設定で、Explorerからも除外する設定だ。
 これもしばらく運用してみてローカル管理がしっくりくるのか、いずれ結論を出したいと思う。
+
+### SVGを表示する方法
+
+あまり見慣れない`raw`というヘルパーメソッドを使用している。
+
+```ruby title="icon_helper.rb"
+module IconHelper
+  def svg(file_name)
+    icons_path = Rails.root.join("app/assets/icons").join(file_name)
+    File.open(icons_path) do |f|
+      raw f.read
+    end
+  end
+end
+```
+
+参考URL: [How do I display SVG image in Rails?](https://stackoverflow.com/questions/36986925/how-do-i-display-svg-image-in-rails)
+
+### テンプレートのログを隠す
+
+最近ではView Componentを使えば似たような事ができなくもない事に気がついたのだけれども、モデルの数だけ`render`が呼ばれるのが鬱陶しく感じる。
+
+とはいえSQLのログやコントローラのパラメータは表示しておきたいので次のオプションを有効にすることにした。`rails dev:cache`みたいにファイルで制御できるようにしてもよさそうではある。
+
+```ruby title="config/initializers/action_view.rb"
+Rails.application.config.action_view.logger = nil
+```
+
+参考URL: [Hide rendering of partials from rails logs](https://stackoverflow.com/questions/17312076/hide-rendering-of-partials-from-rails-logs)
